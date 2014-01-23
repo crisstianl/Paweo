@@ -143,9 +143,10 @@ function onMenuItemOver(itemName, show) {
 }
 
 function onSearchVideoClick() {
-	searchVideo('Balan', function(results) {
-		alert(results.items[1].id.videoId);
-	});
+	var text = document.getElementById('searchBar-text').value;
+	if (!isEmptyOrBlank(text)) {
+		window.location.href = "search.html?q=" + text;
+	}
 }
 
 function onMoreBtnClick() {
