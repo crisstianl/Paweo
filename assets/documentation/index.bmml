@@ -1,0 +1,102 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1394" measuredH="809" mockupW="1024" mockupH="800">
+  <controls>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="370" y="9" w="1024" h="800" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <text>A%20Web%20Page%0Ahttp%3A//www..paweo..com</text>
+      </controlProperties>
+    </control>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::Image" x="373" y="115" w="1017" h="500" measuredW="1245" measuredH="575" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>../images/background.jpg</src>
+      </controlProperties>
+    </control>
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::Image" x="376" y="115" w="231" h="176" measuredW="225" measuredH="225" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>../images/paweo_logo.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="11" controlTypeID="com.balsamiq.mockups::Canvas" x="373" y="82" w="1018" h="33" measuredW="100" measuredH="70" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <backgroundAlpha>0.75</backgroundAlpha>
+        <borderStyle>none</borderStyle>
+        <color>545684</color>
+      </controlProperties>
+    </control>
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="1328" y="86" w="-1" h="-1" measuredW="51" measuredH="24" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <size>16</size>
+        <text>Sign%20in</text>
+      </controlProperties>
+    </control>
+    <control controlID="13" controlTypeID="com.balsamiq.mockups::Label" x="1260" y="86" w="-1" h="-1" measuredW="53" measuredH="24" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <size>16</size>
+        <text>Genres</text>
+      </controlProperties>
+    </control>
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::Label" x="1190" y="86" w="-1" h="-1" measuredW="55" measuredH="24" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <size>16</size>
+        <text>Popular</text>
+      </controlProperties>
+    </control>
+    <control controlID="15" controlTypeID="com.balsamiq.mockups::Label" x="1128" y="86" w="-1" h="-1" measuredW="47" measuredH="24" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <size>16</size>
+        <text>Latest</text>
+      </controlProperties>
+    </control>
+    <control controlID="16" controlTypeID="com.balsamiq.mockups::Image" x="569" y="615" w="75" h="66" measuredW="96" measuredH="76" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>../images/audio_logo.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::Image" x="1114" y="615" w="75" h="66" measuredW="96" measuredH="76" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>../images/video_logo.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="18" controlTypeID="com.balsamiq.mockups::Label" x="514" y="687" w="-1" h="-1" measuredW="205" measuredH="24" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <size>16</size>
+        <text>Millions%20of%20songs%20and%20artists</text>
+      </controlProperties>
+    </control>
+    <control controlID="19" controlTypeID="com.balsamiq.mockups::Canvas" x="373" y="615" w="1018" h="168" measuredW="100" measuredH="70" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <backgroundAlpha>0.75</backgroundAlpha>
+        <borderStyle>none</borderStyle>
+        <color>545684</color>
+      </controlProperties>
+    </control>
+    <control controlID="20" controlTypeID="com.balsamiq.mockups::Label" x="1008" y="687" w="-1" h="-1" measuredW="287" measuredH="24" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <size>16</size>
+        <text>Exclusive%20videos%20from%20all%20over%20the%20world</text>
+      </controlProperties>
+    </control>
+    <control controlID="22" controlTypeID="com.balsamiq.mockups::Paragraph" x="405" y="711" w="489" h="81" measuredW="200" measuredH="80" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>center</align>
+        <color>16777215</color>
+        <size>14</size>
+        <text>Paweo%20has%20millions%20of%20songs%2C%20from%20massive%20hits%20to%20rare%20gems%20to%20cult%20classics%2C%20%0Awith%20more%20added%20every%20week.%20It%u2019s%20more%20music%20than%20you%20could%20listen%20to%20%0Ain%20a%20lifetime.</text>
+      </controlProperties>
+    </control>
+    <control controlID="23" controlTypeID="com.balsamiq.mockups::Paragraph" x="945" y="711" w="434" h="80" measuredW="200" measuredH="80" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>center</align>
+        <color>16777215</color>
+        <size>14</size>
+        <text>Search%20through%20hundreds%20of%20millions%20of%20breaking%20news%2C%20hot%20viral%2C%20%0ATV%20show%20%26%20music%20videos%20from%20all%20over%20the%20Web.%20%0ABrowse%20categories%20to%20find%20just%20what%20you%20want.</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

@@ -1,0 +1,104 @@
+@media screen and (min-width: 1280px) and (min-height: 600px) {
+	body {
+		background-color:#708090;
+	}
+	#container {
+		position: static;
+		width: 1200px;
+		height: 760px;
+		margin: auto;
+		background-color: white;
+	}
+	#header {
+		position: relative;
+		display: block;
+		width: 1200px;
+		height: 40px;
+		background-color: #006699;
+	}
+	#content {
+		position: relative;
+		display: block;
+		width: 1200px;
+		height: 520px;
+		background-color: white;
+	}
+	#footer {
+		position: relative;
+		display: block;
+		width: 1200px;
+		height: 200px;
+		background-color: #006699;
+	}
+	.header_menu {
+		display: inline-block;
+		float: right;
+		list-style-type: none;
+		text-align: center;
+		font-family: sans-serif;
+	}
+	ul li {
+		display: inline-block;			
+		margin-right: 20px;		
+		color: white;
+		font-size: 16px;
+		cursor: pointer;
+		text-decoration: none;
+	}
+	ul li:hover {
+		font-weight: bold;
+		border-bottom: 1px solid white;
+	}
+	ul li ul {
+		position: absolute;
+		display:none;
+		list-style-type: none;
+		font-family: sans-serif;
+		font-weight: normal;
+		background-color: #006699;
+		margin-top:1px;
+		z-index: 1;
+	}
+	ul li ul li {
+		display: block;
+		color: white;
+		float:left;			
+		cursor: pointer;
+		text-decoration: none;
+		font-size: 16px;
+		clear: both;
+	}
+	.background {
+		width: 100%;
+		height: 100%;
+		z-index: 0;
+	}
+	.logo {
+		position: absolute;
+		top: 5px;
+		width: 200px;
+		height: 200px;
+		z-index: 1;		
+	}
+	.left_panel {
+		position: relative;
+		display: inline-block;
+		width: 500px;
+		height: 320px;
+		margin-left: 30px;
+		text-align: center;
+	}
+	.right_panel {
+		position: relative;
+		display: inline-block;
+		width: 500px;
+		height: 320px;
+		float: right;
+		margin-right: 30px;
+		text-align: center;
+	}
+	.left_panel span,.right_panel span {
+		color: white;
+		font-size: 16px;
+	}
+}
