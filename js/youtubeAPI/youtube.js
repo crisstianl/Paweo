@@ -31,10 +31,10 @@ function searchVideosByCategory(categoryId, order, rowNr, responseHandler) {
 }
 
 // Search for a specified string.
-function searchVideo(query, responseHandler) {
+function searchVideo(query, part, responseHandler) {
 	var request = gapi.client.youtube.search.list({
 		q : query,
-		part : 'snippet',
+		part : part,
 		maxResults : DEFAULT_RESULTS_NUMBER * 10
 	});
 
@@ -42,7 +42,7 @@ function searchVideo(query, responseHandler) {
 		if ('error' in response) {
 			console.log(response.error.message);
 		} else if (response.result.pageInfo.totalResults > 0) {
-			responseHandler(response.result);
+			responseHandler(response.result.items);
 		}
 	});
 }
