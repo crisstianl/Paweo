@@ -34,8 +34,8 @@ function bookmarkVideo(videoId) {
 	// Check for a duplicate in list
 	if (!checkInList(videoId)) {
 		getVideoById(videoId, function(result) {
-			playlistItems.push(result);
-			refreshData();
+			 playlistItems.push(result);
+			 refreshData();
 		});
 	}
 }
@@ -55,22 +55,8 @@ function bookmarkVideos(videoIds) {
 
 function populatePlaylistTable() {
 	var playlist = document.getElementById('video-playlist');
-	var filterApplied = isFilterApplied();
 
 	for (var i = 0; i < playlistItems.length; i++) {
-		if (filterApplied) {
-			// Filter is applied search for the id in itemsFound list
-			var found = false;
-			for (var j = 0; j < itemsFound.length; j++) {
-				if (playlistItems[i].id.match(itemsFound) !== null) {
-					found = true;
-					break;
-				}
-			}
-			if (!found) {
-				continue;
-			}
-		}
 		var row = playlist.insertRow(playlist.rows.length);
 		var cell1 = row.insertCell(0);
 		var cell2 = row.insertCell(1);
@@ -83,7 +69,7 @@ function populatePlaylistTable() {
 		cell1.innerHTML = cell1Container;
 
 		// Cell 2 content - video title, views, count and so on
-		var removeIcon = "<img class='removeIcon' src='../assets/images/delete_icon.png' alt='' onclick='javascript:removePlaylistRow({0})'>"
+		var removeIcon = "<figure class='removeIcon'><img src='../assets/images/delete_icon.png' alt='' onclick='javascript:removePlaylistRow({0})'></figure>"
 				.format(i);
 		var title = "<p class='videoTitle'>{0}</p>".format(playlistItems[i].snippet.title);
 		var info = "<p class='videoSubtitle'>{0} views </br>{1}".format(Globalize.format(

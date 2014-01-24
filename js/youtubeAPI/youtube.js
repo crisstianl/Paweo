@@ -100,7 +100,7 @@ function getVideosById(videoIds, responseHandler) {
 	for (var i = 0; i < videoIds.length; i++) {
 		str += videoIds[i] + ", ";
 	}
-
+	
 	var request = gapi.client.youtube.videos.list({
 		part : 'snippet, statistics',
 		id : str,
@@ -108,7 +108,7 @@ function getVideosById(videoIds, responseHandler) {
 	});
 
 	request.execute(function(response) {
-		if ('error' in response) {
+		if ('error' in response) {			
 			console.log(response.error.message);
 		} else if (response.result.pageInfo.totalResults > 0) {
 			responseHandler(response.result.items);

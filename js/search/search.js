@@ -15,12 +15,13 @@ function parseURL() {
 
 function loadTableItems() {
 	searchVideo(query, 'id', function(results) {
-		//Push all video ids into array
+		// Push all video ids into array
 		var videos = new Array();
-		for (var i = 0; i < results.length; i++) {
+		for (var i = 0; i < results.length - 1; i++) {
 			videos.push(results[i].id.videoId);
 		}
-		getVideosById(videos, function(results) {
+
+		getVideosById(videos, function(results) {			
 			buildHTMLTable(results);
 		});
 	});
@@ -36,20 +37,21 @@ function buildHTMLTable(results) {
 		// Cell 1 content - video thumbnail
 		var videoImg = "<img class='videoThumbnail' src='{0}' alt='' onclick='javascript:onVideoItemClick(\"{1}\")'>"
 				.format(results[i].snippet.thumbnails.medium.url, results[i].id);
+		var bookmarkIcon = "<img class='videoBookmark' src='../assets/images/yellow_star.png' alt='' onclick='javascript:onBookmarkIconClick(\"{0}\")'>"
+				.format(results[i].id);
 
-		var cell1Container = "<div class='videoList-cell1'>{0}</div>".format(videoImg);
+		var cell1Container = "<div class='videoList-cell1'>{0}</div>".format(videoImg
+				+ bookmarkIcon);
 		cell1.innerHTML = cell1Container;
 
 		// Cell 2 content - video title, views, count and so on
-		var removeIcon = "<img class='removeIcon' src='../assets/images/delete_icon.png' alt='' onclick='javascript:removePlaylistRow({0})'>"
-				.format(i);
 		var title = "<p class='videoTitle'>{0}</p>".format(results[i].snippet.title);
-		var info = "<p class='videoSubtitle'>{0} views </br>{1}".format(Globalize.format(
-				results[i].statistics.viewCount, 'n0'), Globalize.format(new Date(
-						results[i].snippet.publishedAt), 'dd-MM-yyyy'));
+		var info = "<p class='videoSubtitle'>Uploaded at {0}</br>{1} views </br>{2} likes </br>{3} dislikes"
+				.format(Globalize.format(new Date(results[i].snippet.publishedAt), 'dd-MM-yyyy'),
+						Globalize.format(results[i].statistics.viewCount,"n0"), results[i].statistics.likeCount,
+						results[i].statistics.dislikeCount);
 
-		var cell2Container = "<div class='videoList-cell2'>{0}</div>".format(title + info
-				+ removeIcon);
+		var cell2Container = "<div class='videoList-cell2'>{0}</div>".format(title + info);
 		cell2.innerHTML = cell2Container;
 	}
 }
