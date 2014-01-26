@@ -13,6 +13,7 @@
 
 <!-- Custom styles for this page -->
 <link href="../css/watch.css" rel="stylesheet">
+<link href="../css/playlist.css" rel="stylesheet">
 
 </head>
 
@@ -73,7 +74,7 @@
 			<div id="right_panel">				
 				<div  class="panel panel-default playlist_container">
 					<!-- Default panel contents -->
-					<div class="panel-heading playlist_title"></div>
+					<div class="panel-heading playlist_title" onclick="changePlaylistName()"></div>
 					
 					<div class="btn-group controls_playlist">
 						<button type="button" class="btn btn-default" onclick="onNewBtnClick()">New</button>
@@ -81,7 +82,7 @@
 						<button type="button" class="btn btn-default" onclick="onSaveBtnClick()">Save</button>						
 						<div class="btn-group">
 							<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-								None 
+								Sort 
 								<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu">
@@ -94,7 +95,7 @@
 					</div>
 					
 					<div class="input-group playlist_searchBar">
-						<input type="text" id="playlistSearch-text" class="form-control" onchange="onSearchTextChanged(this.value)" placeholder="Search video in playlist">
+						<input type="text" id="playlistSearch-text" class="form-control" placeholder="Search video in playlist">
 						<span class="input-group-addon"><span id="playlistSearch-btn" class="glyphicon glyphicon-search" onclick="onSearchPlaylistClick(this)"></span></span>
 					</div>
 					

@@ -37,7 +37,7 @@ function buildHTMLTable(results) {
 		// Cell 1 content - video thumbnail
 		var videoImg = "<img class='videoThumbnail' src='{0}' alt='' onclick='javascript:onVideoItemClick(\"{1}\")'>"
 				.format(results[i].snippet.thumbnails.medium.url, results[i].id);
-		var bookmarkIcon = "<img class='videoBookmark' src='../assets/images/yellow_star.png' alt='' onclick='javascript:onBookmarkIconClick(\"{0}\")'>"
+		var bookmarkIcon = "<img class='videoBookmark' src='../assets/images/icon_bookmark.png' alt='' onclick='javascript:onBookmarkIconClick(\"{0}\")'>"
 				.format(results[i].id);
 
 		var cell1Container = "<div class='videoList-cell1'>{0}</div>".format(videoImg

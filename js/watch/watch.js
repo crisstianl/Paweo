@@ -64,7 +64,7 @@ function populateVideoCategories() {
 		var id = videoCategories[i].id;
 		var title = videoCategories[i].snippet.title;
 
-		var bookmarkIcon = "<img class='video_bookmark' src='../assets/images/yellow_star.png' alt='' onclick='javascript:onBookmarkAllIconClick({0})'>"
+		var bookmarkIcon = "<img class='video_bookmark' src='../assets/images/icon_bookmark.png' alt='' onclick='javascript:onBookmarkAllIconClick({0})'>"
 				.format(i * 2);
 		var categoryName = "<p id='{0}' class='video_category'>{1}</p>".format(id, title);
 		var container = "<div id='videoList-cell1'>{0}</div>".format(categoryName + bookmarkIcon);
@@ -113,7 +113,7 @@ function handleVideoResults(results, rowNr) {
 		var title = "<p id='{0}' class='video_title'>{1}</p>".format(results.items[j].id.videoId,
 				results.items[j].snippet.title);
 
-		var bookmarkIcon = "<img class='video_bookmark' src='../assets/images/yellow_star.png' alt='' onclick='javascript:onBookmarkIconClick(\"{0}\")'>"
+		var bookmarkIcon = "<img class='video_bookmark' src='../assets/images/icon_bookmark.png' alt='' onclick='javascript:onBookmarkIconClick(\"{0}\")'>"
 				.format(results.items[j].id.videoId);
 
 		var cell = videoList.rows[rowNr].cells[j];

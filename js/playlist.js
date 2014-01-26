@@ -4,6 +4,11 @@ document.addEventListener("DOMContentLoaded", function() {
 	// Reset playlist search views
 	$('#playlistSearch-btn').text("Title");
 	$('#playlistSearch-text').val("");
+
+	$('#playlistSearch-text').keyup(function() {
+		onSearchTextChanged(this.value);
+	});
+
 }, false);
 
 // List sort types
@@ -21,21 +26,20 @@ var DATE_FILTER = 2;
 var MAX_ITEMS_IN_PLAYLIST = 50;
 // Keep all items from playlist
 var playlistItems = new Array();
-// Keep filtered items
-var itemsFound = new Array();
 
 var sortOrder = NO_ORDER;
 var sortAsceding = true;
 
 var filterType = TITLE_FILTER;
 var playlistName = "My playlist";
+var filterText = "";
 
 function bookmarkVideo(videoId) {
 	// Check for a duplicate in list
 	if (!checkInList(videoId)) {
 		getVideoById(videoId, function(result) {
-			 playlistItems.push(result);
-			 refreshData();
+			playlistItems.push(result);
+			refreshData();
 		});
 	}
 }
@@ -57,6 +61,11 @@ function populatePlaylistTable() {
 	var playlist = document.getElementById('video-playlist');
 
 	for (var i = 0; i < playlistItems.length; i++) {
+		var valid = checkFilter(playlistItems[i]);
+		if (!valid) {
+			continue;
+		}
+
 		var row = playlist.insertRow(playlist.rows.length);
 		var cell1 = row.insertCell(0);
 		var cell2 = row.insertCell(1);
@@ -69,7 +78,7 @@ function populatePlaylistTable() {
 		cell1.innerHTML = cell1Container;
 
 		// Cell 2 content - video title, views, count and so on
-		var removeIcon = "<figure class='removeIcon'><img src='../assets/images/delete_icon.png' alt='' onclick='javascript:removePlaylistRow({0})'></figure>"
+		var removeIcon = "<figure class='removeIcon'><img src='../assets/images/icon_delete.png' alt='' onclick='javascript:removePlaylistRow({0})'></figure>"
 				.format(i);
 		var title = "<p class='videoTitle'>{0}</p>".format(playlistItems[i].snippet.title);
 		var info = "<p class='videoSubtitle'>{0} views </br>{1}".format(Globalize.format(
@@ -151,10 +160,30 @@ function checkPlaylistItems(videoIds) {
 	return retList;
 }
 
-// If user has typed more than 2 letters, return true
-function isFilterApplied() {
-	var text = document.getElementById('playlistSearch-text').value;
-	return (!isEmptyOrBlank(text) && text.length > 1);
+function checkFilter(row) {
+	if (filterText.length <= 2) {
+		return true;
+	}
+
+	switch (filterType) {
+	case TITLE_FILTER:
+		if (row.snippet.title.contains(filterText)) {
+			return true;
+		}
+		break;
+	case DESCRIPTION_FILTER:
+		if (row.snippet.description.contains(filterText)) {
+			return true;
+		}
+		break;
+	case DATE_FILTER:
+		if (row.snippet.publishedAt.contains(filterText)) {
+			return true;
+		}
+		break;
+	}
+
+	return false;
 }
 
 function onNewBtnClick() {
@@ -241,33 +270,8 @@ function onSortOrderChanged(newSortOrder) {
 }
 
 function onSearchTextChanged(text) {
-	// Start search for strings larger than 2 letters
-	if (isEmptyOrBlank(text) || text.length <= 2) {
-		refreshData();
-		return;
-	}
-	// Clear any previous filter
-	itemsFound.length = 0;
-	for (var i = 0; i < playlistItems.length; i++) {
-		var found = false;
-
-		switch (filterType) {
-		case TITLE_FILTER:
-			found = playlistItems[i].snippet.title.contains(text);
-			break;
-		case DESCRIPTION_FILTER:
-			found = playlistItems[i].snippet.description.contains(text);
-			break;
-		case DATE_FILTER:
-			found = playlistItems[i].snippet.publishedAt.contains(text);
-			break;
-		}
-
-		if (found) {
-			itemsFound.push(playlistItems[i].id);
-		}
-	}
-
+	filterText = text;
+	console.log(text);
 	refreshData();
 }
 
@@ -287,6 +291,14 @@ function onSearchPlaylistClick(btn) {
 	}
 	// Apply new filter on list
 	onSearchTextChanged(document.getElementById('playlistSearch-text').value);
+}
+
+function changePlaylistName() {
+	var input = window.prompt("Name playlist", playlistItems);
+	if (!isEmptyOrBlank(input)) {
+		playlistName = input;
+		$('.playlist_title').text(playlistName);
+	}
 }
 
 function setDropdownSortTypes() {

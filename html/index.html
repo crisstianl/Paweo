@@ -18,26 +18,19 @@
 	<div id="container">
 
 		<div id="header">
-			<ul class="header_menu">
-				<li onclick="onHeaderMenuItemClick('mostRecent')">Latest</li>
-				<li onclick="onHeaderMenuItemClick('mostPopular')">Popular</li>
-				<li onmouseover="onMenuItemOver('.sub_header_menu',true)" onmouseout="onMenuItemOver('.sub_header_menu',false)">Channels
-					<ul class="sub_header_menu">
-						<li onclick="onHeaderMenuItemClick('genre/pop')">Pop</li>
-						<li onclick="onHeaderMenuItemClick('genre/house')">House</li>
-						<li onclick="onHeaderMenuItemClick('genre/rock')">Rock</li>
-					</ul>
-				</li>
-			</ul>
 		</div>
 
 		<div id="content" class="content">
 			<figure>
 				<img class="background" src="../assets/images/background.jpg" alt="">
 			</figure>
+			
 			<figure>
 				<img class="logo" src="../assets/images/paweo_logo.png" alt="">
 			</figure>
+			
+			<table id="menuList">
+			</table>
 		</div>
 
 		<div id="footer">
@@ -65,8 +58,8 @@
 	</div>
 	<!-- /container -->
 
-	<!-- Placed at the end of the document so the pages load faster -->
-	<script src="../assets/js/jquery-1.10.2.js"></script>
-	<script src="../js/index/index.js"></script>		
+	<!-- Placed at the end of the document so the pages load faster -->	
+	<script src="../js/index/index.js"></script>
+	<script src="../js/utils/utils.js"></script>			
 </body>
 </html>
