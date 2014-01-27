@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 }, false);
 
+var URL_DOWNLOADER = 'http://fenrir.info.uaic.ro/~adrian.lucaci/Paweo/php/downloader.php';
+
 // List sort types
 var NO_ORDER = -1;
 var TITLE_ORDER = 0;
@@ -191,10 +193,8 @@ function onNewBtnClick() {
 		var forceSave = window.confirm("Save current list");
 		if (forceSave) {
 			onSaveBtnClick();
-			clearPlaylist();
-		} else {
-			clearPlaylist();
 		}
+		clearPlaylist();
 	}
 }
 
@@ -241,21 +241,28 @@ function onSaveBtnClick() {
 		};
 		list.push(obj);
 	}
-	// console.log(JSON.stringify(list));
-	// var xmlRequest = createHttpRequest();
-	// xmlRequest.open("POST",
-	// 'http://localhost:8080/Paweo/php/webservices.php', true);
-	// xmlRequest.onload = function(e) {
-	// console.log(xmlRequest.reponseText);
-	// };
-	// xmlRequest.send('filename=aaa.json&content=ssrt');
 
-	// $.post('http://localhost:8080/Paweo/php/webservices.php', {
-	// filename : 'aa.json',
-	// content : 'aaabb'
-	// }, function(result) {
-	// console.log(result);
-	// });
+	var params = {
+		'filename' : playlistName + ".json",
+		'content' : JSON.stringify(list)
+	};
+
+	var form = document.createElement("form");
+	form.setAttribute("method", "post");
+	form.setAttribute("action", URL_DOWNLOADER);
+
+	for ( var key in params) {
+		if (params.hasOwnProperty(key)) {
+			var hiddenField = document.createElement("input");
+			hiddenField.setAttribute("type", "hidden");
+			hiddenField.setAttribute("name", key);
+			hiddenField.setAttribute("value", params[key]);
+
+			form.appendChild(hiddenField);
+		}
+	}
+
+	form.submit();
 }
 
 function onSortOrderChanged(newSortOrder) {
@@ -271,7 +278,6 @@ function onSortOrderChanged(newSortOrder) {
 
 function onSearchTextChanged(text) {
 	filterText = text;
-	console.log(text);
 	refreshData();
 }
 
@@ -294,7 +300,7 @@ function onSearchPlaylistClick(btn) {
 }
 
 function changePlaylistName() {
-	var input = window.prompt("Name playlist", playlistItems);
+	var input = window.prompt("Name playlist", playlistName);
 	if (!isEmptyOrBlank(input)) {
 		playlistName = input;
 		$('.playlist_title').text(playlistName);
