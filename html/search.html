@@ -32,6 +32,7 @@
 			<ul class="header_menu">
 				<li onclick="onHeaderMenuItemClick('mostRecent')">Latest</li>
 				<li onclick="onHeaderMenuItemClick('mostPopular')">Popular</li>
+				<!-- Not working for now
 				<li onmouseover="onMenuItemOver('.sub_header_menu',true)"
 					onmouseout="onMenuItemOver('.sub_header_menu',false)">Channels
 					<ul class="sub_header_menu">
@@ -40,6 +41,7 @@
 						<li onclick="onHeaderMenuItemClick('genre/rock')">Rock</li>
 					</ul>
 				</li>
+				-->
 			</ul>
 		</div>
 
@@ -50,9 +52,11 @@
 				</figure>
 				<p>Genres</p>
 				<ul class="left_panel_menu">
+					<!-- Not working
 					<li onclick="onHeaderMenuItemClick('pop')">&gt; Pop</li>
 					<li onclick="onHeaderMenuItemClick('house')">&gt; House</li>
 					<li onclick="onHeaderMenuItemClick('rock')">&gt; Rock</li>
+					-->
 				</ul>
 			</div>
 
@@ -115,7 +119,8 @@
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script src="../assets/js/jquery-1.10.2.js"></script>
 	
-	<script src="../js/search/search.js"></script>	
+	<script src="../js/search/search.js"></script>
+	<script src="../js/database/DatabaseHelper.js"></script>	
 	<script src="../js/playlist.js"></script>
 	
 	<script src="../js/utils/utils.js"></script>	

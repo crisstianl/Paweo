@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
 	buildMenuList();
-	dbHelper.initHelper();
+	dbHelper.initHelper(function(){
+		dbHelper.clearVideos();
+	});	
 }, false);
 
 var MENU_ITEM_MOST_WATCHED = 'mostPopular';

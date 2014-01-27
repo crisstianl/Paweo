@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
-	dbHelper.initHelper()
-	
+	dbHelper.initHelper(function() {
+		loadStoredVideos();
+	});
+
 	// Set playlist name
 	$('.playlist_title').text(playlistName);
 	// Reset playlist search views
@@ -43,9 +45,12 @@ function bookmarkVideo(videoId) {
 	// Check for a duplicate in list
 	if (!checkInList(videoId)) {
 		getVideoById(videoId, function(result) {
+			// update our list of videos
 			playlistItems.push(result);
-			refreshData();
+			// update local database
 			dbHelper.insertVideo(result);
+			// refresh ui data
+			refreshData();
 		});
 	}
 }
@@ -55,12 +60,26 @@ function bookmarkVideos(videoIds) {
 	var pendingVideos = checkPlaylistItems(videoIds);
 	if (pendingVideos.length > 0) {
 		getVideosById(pendingVideos, function(results) {
+			//update list
 			for (var i = 0; i < results.length; i++) {
 				playlistItems.push(results[i]);
 			}
+			//update db
+			dbHelper.insertVideos(results);
+			//refresh ui elements
 			refreshData();
 		});
 	}
+}
+
+function loadStoredVideos() {
+	dbHelper.queryAllVideos(function(results) {
+		for (var i = 0; i < results.length; i++) {
+			playlistItems.push(results[i]);
+		}
+		// update ui table
+		refreshData();
+	});
 }
 
 function populatePlaylistTable() {
@@ -100,17 +119,23 @@ function populatePlaylistTable() {
 function clearPlaylist() {
 	// Clear array
 	playlistItems.length = 0;
+	// Clear database
+	dbHelper.clearVideos();
 	// Clear table
 	$('#video-playlist').empty();
 }
 
 function removePlaylistRow(videoId) {
+	// remove it from list
 	for (var i = 0; i < playlistItems.length; i++) {
 		if (playlistItems[i].id === videoId) {
 			playlistItems.splice(i, 1);
 			break;
 		}
 	}
+
+	// removed also from db
+	dbHelper.deleteVideoById(videoId);
 
 	refreshData();
 }
@@ -122,6 +147,7 @@ function refreshData() {
 	if (sortOrder != NO_ORDER) {
 		playlistItems.sort(sortComparator);
 	}
+	// create ui table
 	populatePlaylistTable();
 }
 

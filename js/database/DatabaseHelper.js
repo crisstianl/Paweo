@@ -2,16 +2,16 @@ var VIDEOS = "videos";
 
 DatabaseHelper = function() {
 	this.name = "paweo";
-	this.version = '2';
+	this.version = 2;
 	this.db = null;
 };
 
 DatabaseHelper.prototype = {
-	initHelper : function() {
-		var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB
+	initHelper : function(callback) {
+		window.indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB
 				|| window.msIndexedDB;
 
-		var request = indexedDB.open(this.name);
+		var request = window.indexedDB.open(this.name, 2);
 		request.onerror = function(event) {
 			console.log("Failed to create indexed db with error " + event.target.errorCode);
 		};
@@ -19,37 +19,26 @@ DatabaseHelper.prototype = {
 			console.log("The indexed db \"" + dbHelper.name + "\" was created succesfully");
 			dbHelper.db = event.target.result;
 
-			// We can only create objects store in a setVersion transaction
-			if (dbHelper.version != dbHelper.db.version) {
-				if (dbHelper.db.setVersion) {
-					var versionRequest = dbHelper.db.setVersion(dbHelper.version);
-					// onsuccess is the only place where the objects can be
-					// created
-					versionRequest.onsuccess = function(event) {
-						console.log("Successfuly changed version to " + dbHelper.version);
-						dbHelper.createObjects();
-					};
-				} else {
-					dbHelper.db.version = dbHelper.version;
-					dbHelper.db.onversionchange = function(event) {
-						console.log("Successfuly changed version to " + dbHelper.version);
-						dbHelper.createObjects();
-					};
-				}
-			}
+			callback();
+		};
+		request.onupgradeneeded = function(event) {
+			dbHelper.createObjects(event.target.result);
 		};
 	},
 
-	createObjects : function() {
-		console.log("xxxxx");
+	createObjects : function(db) {
+		console.log("Creating database objects");
 		// keyPath is more like a primary key in sql
-		this.db.createObjectStore(VIDEOS, {
+		var store = db.createObjectStore(VIDEOS, {
 			keyPath : "id"
+		});
+		store.createIndex("id", "id", {
+			unique : true
 		});
 	},
 
 	insertVideo : function(video) {
-		var transaction = this.db.transaction([ VIDEOS ], IDBTransaction.READ_WRITE);
+		var transaction = this.db.transaction([ VIDEOS ], "readwrite");
 		var store = transaction.objectStore(VIDEOS);
 		var request = store.put(video);
 		request.onsuccess = function(event) {
@@ -60,9 +49,48 @@ DatabaseHelper.prototype = {
 		};
 	},
 
-	queryAllVideos : function() {
+	insertVideos : function(videoArray) {
+		var transaction = this.db.transaction([ VIDEOS ], "readwrite");
+		var store = transaction.objectStore(VIDEOS);
+
+		for ( var i in videoArray) {			
+			var request = store.add(videoArray[i]);
+			request.onsuccess = function(event) {
+				console.log("Video with id" + event.target.result + " has been added");
+			};
+			request.onerror = function(event) {
+				console.log(event.target.errorCode);
+			};
+		}
+	},
+
+	getVideoById : function(videoId, resultHandler) {
+		var transaction = this.db.transaction([ VIDEOS ], "readonly");
+		var store = transaction.objectStore(VIDEOS);
+		var request = store.get(videoId);
+		request.onsuccess = function(event) {
+			resultHandler(event.target.result);
+		};
+		request.onerror = function(event) {
+			console.log(event.target.errorCode);
+		};
+	},
+
+	deleteVideoById : function(videoId) {
+		var transaction = this.db.transaction([ VIDEOS ], "readwrite");
+		var store = transaction.objectStore(VIDEOS);
+		var request = store.delete(videoId);
+		request.onsuccess = function(event) {
+			console.log("Video with id " + videoId + " has been deleleted");
+		};
+		request.onerror = function(event) {
+			console.log(event.target.errorCode);
+		};
+	},
+
+	queryAllVideos : function(resultHandler) {
 		var retList = []; // empty array
-		var transaction = this.db.transaction([ VIDEOS ], IDBTransaction.READ_WRITE);
+		var transaction = this.db.transaction([ VIDEOS ], "readonly");
 		var store = transaction.objectStore(VIDEOS);
 
 		var request = store.openCursor();
@@ -70,11 +98,23 @@ DatabaseHelper.prototype = {
 			var cursor = e.target.result;
 			if (cursor) {
 				retList.push(cursor.value);
-				// cursor.continue();
-			}			
+				cursor.continue();
+			} else {
+				resultHandler(retList);
+			}
 		};
+	},
 
-		return retList;
+	clearVideos : function() {
+		var transaction = this.db.transaction([ VIDEOS ], "readwrite");
+		var store = transaction.objectStore(VIDEOS);
+		var request = store.clear();
+		request.onsuccess = function(event) {
+			console.log("Table videos has been cleared");
+		};
+		request.onerror = function(event) {
+			console.log(event.target.errorCode);
+		};
 	}
 };
 
