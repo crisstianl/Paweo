@@ -146,7 +146,7 @@
 		display: block;
 		width: 650px;
 		height: 400px;
-		background-color: red;
+		background-color: black;
 	}
 	#videoPlayer {
 		width: 100%;
@@ -157,6 +157,9 @@
 		display: block;
 		width: 650px;
 		height: auto;
+	}
+	#watch_window h1{
+		font-size: 20px;
 	}
 	#watch_window button {
 		border: 2px solid gray;

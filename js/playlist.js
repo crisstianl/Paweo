@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
+	dbHelper.initHelper()
+	
 	// Set playlist name
 	$('.playlist_title').text(playlistName);
 	// Reset playlist search views
@@ -35,6 +37,7 @@ var sortAsceding = true;
 var filterType = TITLE_FILTER;
 var playlistName = "My playlist";
 var filterText = "";
+var currentPlaying = 0;
 
 function bookmarkVideo(videoId) {
 	// Check for a duplicate in list
@@ -42,6 +45,7 @@ function bookmarkVideo(videoId) {
 		getVideoById(videoId, function(result) {
 			playlistItems.push(result);
 			refreshData();
+			dbHelper.insertVideo(result);
 		});
 	}
 }
@@ -73,15 +77,15 @@ function populatePlaylistTable() {
 		var cell2 = row.insertCell(1);
 
 		// Cell 1 content - video thumbnail
-		var videoImg = "<img class='videoThumbnail' src='{0}' alt='' onclick='javascript:onVideoItemClick(\"{1}\")'>"
+		var videoImg = "<img class='videoThumbnail' src='{0}' alt='' onclick='javascript:onPlaylistItemClick(\"{1}\")'>"
 				.format(playlistItems[i].snippet.thumbnails.medium.url, playlistItems[i].id);
 
 		var cell1Container = "<div class='videoPlaylist-cell1'>{0}</div>".format(videoImg);
 		cell1.innerHTML = cell1Container;
 
 		// Cell 2 content - video title, views, count and so on
-		var removeIcon = "<figure class='removeIcon'><img src='../assets/images/icon_delete.png' alt='' onclick='javascript:removePlaylistRow({0})'></figure>"
-				.format(i);
+		var removeIcon = "<figure class='removeIcon'><img src='../assets/images/icon_delete.png' alt='' onclick='javascript:removePlaylistRow(\"{0}\")'></figure>"
+				.format(playlistItems[i].id);
 		var title = "<p class='videoTitle'>{0}</p>".format(playlistItems[i].snippet.title);
 		var info = "<p class='videoSubtitle'>{0} views </br>{1}".format(Globalize.format(
 				playlistItems[i].statistics.viewCount, 'n0'), Globalize.format(new Date(
@@ -100,8 +104,14 @@ function clearPlaylist() {
 	$('#video-playlist').empty();
 }
 
-function removePlaylistRow(row) {
-	playlistItems.splice(row, 1);
+function removePlaylistRow(videoId) {
+	for (var i = 0; i < playlistItems.length; i++) {
+		if (playlistItems[i].id === videoId) {
+			playlistItems.splice(i, 1);
+			break;
+		}
+	}
+
 	refreshData();
 }
 
@@ -186,6 +196,45 @@ function checkFilter(row) {
 	}
 
 	return false;
+}
+
+function onPlaylistItemClick(videoId) {
+	document.getElementById('videoPlayer').innerHTML = "";
+	// Create a popcorn instance by calling the Youtube player plugin
+	var player = Popcorn.youtube('#videoPlayer', "http://www.youtube.com/watch?v=" + videoId);
+	// play the video right away
+	player.play();
+
+	player.on("ended", function() {
+		currentPlaying++;
+		if (currentPlaying >= playlistItems.length || currentPlaying < 0) {
+			currentPlaying = 0;
+		}
+		onPlaylistItemClick(playlistItems[currentPlaying].id);
+	});
+
+	setCurrentPlaying(videoId);
+	updateViews();
+}
+
+function setCurrentPlaying(videoId) {
+	for (var i = 0; i < playlistItems.length; i++) {
+		if (playlistItems[i].id === videoId) {
+			currentPlaying = i;
+			break;
+		}
+	}
+}
+
+function updateViews() {
+	var playlist = document.getElementById('video-playlist');
+	for (var row = 0; row < playlist.rows.length; row++) {
+		var style = "background-color: white";
+		if (row === currentPlaying) {
+			style = "background-color: #BFD4FF";
+		}
+		playlist.rows[row].style.cssText = style;
+	}
 }
 
 function onNewBtnClick() {

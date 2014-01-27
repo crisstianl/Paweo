@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
 	parseURL();
 
+	$('.searchQuery').text("Search results for \"" + query + "\"");	
 }, false);
 
 var query;
@@ -21,7 +22,7 @@ function loadTableItems() {
 			videos.push(results[i].id.videoId);
 		}
 
-		getVideosById(videos, function(results) {			
+		getVideosById(videos, function(results) {
 			buildHTMLTable(results);
 		});
 	});
@@ -48,8 +49,8 @@ function buildHTMLTable(results) {
 		var title = "<p class='videoTitle'>{0}</p>".format(results[i].snippet.title);
 		var info = "<p class='videoSubtitle'>Uploaded at {0}</br>{1} views </br>{2} likes </br>{3} dislikes"
 				.format(Globalize.format(new Date(results[i].snippet.publishedAt), 'dd-MM-yyyy'),
-						Globalize.format(results[i].statistics.viewCount,"n0"), results[i].statistics.likeCount,
-						results[i].statistics.dislikeCount);
+						Globalize.format(results[i].statistics.viewCount, "n0"),
+						results[i].statistics.likeCount, results[i].statistics.dislikeCount);
 
 		var cell2Container = "<div class='videoList-cell2'>{0}</div>".format(title + info);
 		cell2.innerHTML = cell2Container;
@@ -76,10 +77,14 @@ function onSearchVideoClick() {
 }
 
 function onVideoItemClick(videoId) {
+	document.getElementById('videoPlayer').innerHTML = "";
 	// Create a popcorn instance by calling the Youtube player plugin
-	var example = Popcorn.youtube('#videoPlayer', "http://www.youtube.com/watch?v=" + videoId);
+	var player = Popcorn.youtube('#videoPlayer', "http://www.youtube.com/watch?v=" + videoId);
 	// play the video right away
-	example.play();
+	player.play();
+
+	player.on("ended", function() {
+	});
 }
 
 function onBookmarkIconClick(videoId) {

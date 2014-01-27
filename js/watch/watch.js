@@ -157,10 +157,14 @@ function onMoreBtnClick() {
 }
 
 function onVideoItemClick(videoId) {
+	document.getElementById('videoPlayer').innerHTML = "";	
 	// Create a popcorn instance by calling the Youtube player plugin
-	var example = Popcorn.youtube('#videoPlayer', "http://www.youtube.com/watch?v=" + videoId);
+	var player = Popcorn.youtube('#videoPlayer', "http://www.youtube.com/watch?v=" + videoId);
 	// play the video right away
-	example.play();
+	player.play();
+	
+	player.on("ended", function(){		
+	});
 }
 
 function onBookmarkIconClick(videoId) {
