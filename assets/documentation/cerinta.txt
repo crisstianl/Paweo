@@ -1,0 +1,9 @@
+Să se realizeze un manager Web de liste de videoclip-uri 
+(preluate via servicii online precum Vimeo sau YouTube) 
+ce pot fi redate într-o anumită ordine desemnată de utilizator 
+sau sugerată de software. Alături de căutarea de resurse video 
+(după artist, numele melodiei, stil muzical etc.), 
+se va oferi posibilitatea căutării versurilor aferente ce vor fi 
+redate sincronizat în regim full-screen. 
+Listele de videoclip-uri (playlists) create vor putea fi stocate local, 
+putând fi ulterior încărcate.
