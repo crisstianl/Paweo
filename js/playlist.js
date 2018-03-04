@@ -47,10 +47,10 @@ function bookmarkVideo(videoId) {
 		getVideoById(videoId, function(result) {
 			// update our list of videos
 			playlistItems.push(result);
-			// refresh ui data
-			refreshData();
 			// update local database
 			dbHelper.insertVideo(result);
+			// refresh ui data
+			refreshData();
 		});
 	}
 }
@@ -63,11 +63,11 @@ function bookmarkVideos(videoIds) {
 			//update list
 			for (var i = 0; i < results.length; i++) {
 				playlistItems.push(results[i]);
-			}			
-			//refresh ui elements
-			refreshData();
+			}
 			//update db
 			dbHelper.insertVideos(results);
+			//refresh ui elements
+			refreshData();
 		});
 	}
 }
@@ -133,11 +133,11 @@ function removePlaylistRow(videoId) {
 			break;
 		}
 	}
-	//refresh ui elements
-	refreshData();
-	
+
 	// removed also from db
 	dbHelper.deleteVideoById(videoId);
+
+	refreshData();
 }
 
 function refreshData() {
