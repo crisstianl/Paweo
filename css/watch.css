@@ -1,239 +1,208 @@
-@media screen and (min-width: 1280px) and (min-height: 600px) {
-	body {
-		background-color: #708090;
-	}
-	#container {
-		position: static;
-		width: 1200px;
-		height: auto;
-		margin: auto;
-		background-color: white;
-	}
-	#header {
-		position: relative;
-		display: block;
-		width: 1200px;
-		height: 40px;
-		background-color: #006699;
-	}
-	#content {
-		position: relative;
-		display: block;
-		width: 1200px;
-		height: auto;
-		background-color: white;
-	}
-	#left_panel {
-		position: relative;
-		display: inline-block;
-		float: left;
-		width: 220px;
-		height: auto;
-	}
-	#center_panel {
-		position: relative;
-		display: inline-block;
-		width: 650px;
-		height: auto;
-	}
-	#right_panel {
-		position: relative;
-		display: inline-block;
-		width: 330px;
-		height: auto;
-		float: right;
-		margin-left: -4px;
-	}
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
 
-	/* HEADER */
-	.header_menu {
-		display: inline-block;
-		float: right;
-		list-style-type: none;
-		text-align: center;
-		font-family: sans-serif;
-	}
-	ul li {
-		display: inline-block;
-		float: right;
-		margin-top: 5px;
-		margin-right: 20px;
-		color: white;
-		font-size: 16px;
-		cursor: pointer;
-		text-decoration: none;
-	}
-	ul li:hover {
-		font-weight: bold;
-		border-bottom: 1px solid white;
-	}
-	ul li ul {
-		position: absolute;
-		display: none;
-		list-style-type: none;
-		font-family: sans-serif;
-		font-weight: normal;
-		background-color: #006699;
-		margin-top: 1px;
-		z-index: 1;
-	}
-	ul li ul li {
-		display: block;
-		color: white;
-		float: left;
-		cursor: pointer;
-		text-decoration: none;
-		font-size: 16px;
-		clear: both;
-	}
-	#header_searchBar {
-		position: relative;
-		display: inline-block;
-		width: 650px;
-		margin-left: 220px;
-	}
-	.header_searchBar {
-		border: 2px solid gray;
-	}
-	.header_searchBar input {
-		border: none;
-		border-radius: 0px;
-	}
-	.header_searchBar .input-group-addon {
-		border: none;
-		border-radius: 0px;
-		border-left: 1px solid gray;
-		cursor: pointer;
-	}
-	/* END */
+} 
 
-	/* LEFT PANEL */
-	#left_panel p {
-		font-size: 18px;
-		font-weight: bold;
-		font-family: sans-serif;
-		margin-left: 30px;
-		margin-top: 10px;
-	}
-	.logo {
-		display: block;
-		top: 5px;
-		width: 200px;
-		height: 200px;
-	}
-	.left_panel_menu {
-		margin-left: 10px;
-	}
-	.left_panel_menu li {
-		display: block;
-		width: auto;
-		clear: both;
-		float: left;
-		text-decoration: none;
-		color: black;
-		font-size: 16px;
-		cursor: pointer;
-	}
-	.left_panel_menu li:hover {
-		font-weight: bold;
-	}
-	/* END */
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
 
-	/* CENTER PANEL */
-	#player_window {
-		position: relative;
-		margin-top: 1px;
-		display: block;
-		width: 650px;
-		height: 400px;
-		background-color: black;
-	}
-	#videoPlayer {
-		width: 100%;
-		height: 100%;
-	}
-	#watch_window {
-		position: relative;
-		display: block;
-		width: 650px;
-		height: auto;
-	}
-	#watch_window button {
-		border: 2px solid gray;
-		border-radius: 0px;
-		width: 100px;
-	}
-	.video_list {
-		position: relative;
-		display: block;
-		width: 100%;
-		vertical-align: text-bottom;
-	}
-	#videoList-cell1 {
-		position: relative;
-		height: 35px;
-	}
-	#videoList-cell1 .video_category {
-		display: inline-block;
-		font-family: sans-serif;
-		font-size: 18px;
-		font-weight: bold;
-	}
-	#videoList-cell1 .video_bookmark {
-		display: inline-block;
-		width: 35px;
-		height: 35px;
-		cursor: pointer;
-	}
-	#videoList-cell2 {
-		position: relative;
-		cursor: pointer;
-		height: 174px;
-		width: 150px;
-		margin-top: 10px;
-	}
-	#videoList-cell2 .video_title {
-		position: absolute;
-		bottom: 0px;
-		font-family: sans-serif;
-		font-size: 12px;
-		height: 30px;
-		width: 100%;
-		background-color: #dadada;
-		color: black;
-		line-height: 1.2;
-		text-overflow: ellipsis;
-		white-space: pre-line;
-		overflow: hidden;
-	}
-	#videoList-cell2 .video_image {
-		position: absolute;
-		width: 100%;
-		height: 130px;
-		border: 2px solid #006699;
-	}
-	#videoList-cell2 .video_bookmark {
-		position: absolute;
-		bottom: 46px;
-		right: 2px;
-		width: 25px;
-		height: 25px;
-		border: 2px solid yellow;
-		opacity: 1;
-	}
-	/* END */
+} 
 
-	/*RIGHT PANEL */
-	.playlist_container {
-		position: relative;
-		display: block;
-		border: 2px solid gray;
-		border-radius: 0px;
-		width: 320px;
-		margin-right: 1px;
-		margin-top: 1px;
-		float: right;
-	}
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
 
-	/*END*/
+} 
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+
+} 
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+
 }
+
+body {
+	background-color: #e6e6e6;
+	padding: 10px;
+}
+
+/* header */
+#header {
+	position: relative;
+	display: block;
+	width: 100%;
+	height: auto;
+	background-color: #006699;
+}
+
+#header .col-1,#header .col-2 {
+	display: inline-block;
+	box-sizing: border-box;
+	vertical-align: top;
+}
+#header .col-1 {
+	width: 14%;
+}
+#header .col-2 {
+	width: 60%;
+}
+
+#header .logo {
+	display: block;
+	width: 60px;
+	height: 60px;
+}
+#header .logo:hover {
+	-webkit-animation:spin 4s linear infinite;
+    -moz-animation:spin 4s linear infinite;
+    animation:spin 4s linear infinite;
+}
+
+#header .header_searchBar {
+	margin: 10px 0 0 0;
+	border: 2px solid gray;
+}
+.header_searchBar input {
+	border: none;
+	border-radius: 0px;
+}
+.header_searchBar .input-group-addon {
+	border: none;
+	border-radius: 0px;
+	border-left: 1px solid gray;
+	cursor: pointer;
+}
+
+/* content */
+#content {
+	position: relative;
+	display: block;
+	width: 100%;
+	height: auto;
+	background-color: white;
+}
+
+#content .col-1,#content .col-2,#content .col-3 {
+	display: inline-block;
+	box-sizing: border-box;
+	vertical-align: top;
+}
+#content .col-1 {
+	width: 14%;
+}
+#content .col-2 {
+	width: 60%;
+}
+#content .col-3 {
+	width: 25%;
+}
+
+/* left pannel */
+#content .leftMenu {
+	margin: 10px 0 0 10px;
+	padding: 0;
+}
+.leftMenu li {
+	display: block;
+	clear: both;
+	margin: 10px 0 0 0;
+	color: #006699;
+	font-size: medium;
+	cursor: pointer;
+}
+.leftMenu li:hover {
+	color: #0099e6;
+	text-decoration: underline;
+}
+
+/* central panel */
+#player_window {
+	position: relative;
+	display: block;
+	margin: 5px 0 0 0;
+	width: 100%;
+	height: 440px;
+	background-color: black;
+}
+#videoPlayer {
+	width: 100%;
+	height: 100%;
+}
+
+#watch_window {
+	position: relative;
+	display: block;
+	width: 100%;
+	height: auto;
+	margin: 10px 0 0 0;
+}
+
+.videoTable {
+	width: 100%;
+	table-layout: fixed;
+}
+.videoTable td {
+	vertical-align: top;
+	width: 25%;
+}
+.videoList-cell1 {
+	display: block;
+	cursor: pointer;
+}
+.videoList-cell1 h4 {
+	display: inline-block;
+	color: #0099e6;
+}
+.videoList-cell1 h4:hover {
+	color: #0099e6;
+	text-decoration: underline;
+}
+
+.videoList-cell2 {
+	position: relative;
+	display: block;
+	cursor: pointer;
+}
+.videoList-cell2 .video_image {
+	display: block;
+	width: 196px;
+	height: 124px;
+	border: 1px solid #000;
+}
+.videoList-cell2 .video_image:hover {
+	border: 2px solid #0099e6;
+}
+.videoList-cell2 .video_title {
+	display: block;
+	font-family: sans-serif;
+	font-size: small;
+	color: black;
+	text-overflow: ellipsis;
+	white-space: pre-line;
+	overflow: hidden;
+	line-height: 1.2;
+}
+.videoList-cell2 .video_title:hover {
+	color: gray;
+}
+
+.video_overlay {
+	position: absolute;
+	visibility: hidden;
+	top: 82px;
+	z-index: 2;
+	font-size: 2.6em;
+	color: yellow;
+}
+.videoList-cell2:hover .video_overlay {
+	visibility: visible;
+}
+.video_overlay:hover {
+	font-size: 2.8em;
+}
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }

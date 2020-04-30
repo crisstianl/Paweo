@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Videos and music online">
+<meta name="author" content="Lucaci Cristian">
+
+<title>Paweo</title>
+
+<!-- Bootstrap core CSS -->
+<link href="../assets/css/bootstrap.css" rel="stylesheet">
+
+<!-- Custom styles for this page -->
+<link href="../css/search.css" rel="stylesheet">
+<link href="../css/playlist.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+	<div id="header">
+		<div class="col-1">
+			<img class="logo" src="../assets/images/paweo_logo.png" alt="">
+		</div>
+
+		<div class="col-2">
+			<div class="input-group header_searchBar">
+				<input type="text" id="searchBar-text" class="form-control" placeholder="Search video on youtube"
+					onkeyup="onSearchTextChanged(event, this)" value=""/>
+				<span class="input-group-addon">
+					<span class="glyphicon glyphicon-search" onclick="onSearchVideoClick(event)">
+					</span>
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<div id="content">
+		<!-- Video categories -->
+		<div class="col-1">	
+			<ul id="leftMenu" class="leftMenu">
+			</ul>
+		</div>
+
+		<!-- Video player and video list -->
+		<div class="col-2">
+			<div id="player_window">
+				<div id="videoPlayer"></div>
+			</div>
+
+			<div id="watch_window">
+				<h4 id="search-text" style="color: #0099e6;">Video results</h4>
+
+				<!-- Videos list -->
+				<table id='video-list' class="videoTable">
+				</table>
+
+				<!-- More button -->
+				<button type="button" class="btn btn-default btn-lg" onclick="onMoreBtnClick(event)" style="color: #0099ff">
+					<span class="glyphicon glyphicon-plus"></span> More
+				</button>
+			</div>				
+		</div>
+
+		<!-- Playlist container -->
+		<div class="col-3">				
+			<div  class="panel panel-default playlist_container">
+				<!-- Title -->
+				<div class="panel-heading" onclick="changePlaylistName(event)">
+					<label id="playlist_title">My Playlist</label>
+				</div>
+
+				<!-- Buttons -->
+				<div class="btn-group controls_playlist">
+					<button type="button" class="btn btn-default" style="width: 25%;" onclick="onNewBtnClick(event)">New</button>
+					<button type="button" class="btn btn-default" style="width: 25%;" onclick="onLoadBtnClick(event)">Load</button>
+					<button type="button" class="btn btn-default" style="width: 25%;" onclick="onSaveBtnClick(event)">Save</button>						
+					<div class="btn-group" style="width: 25%;">
+						<button type="button" class="btn btn-default dropdown-toggle" style="width: 100%;" data-toggle="dropdown">
+							Sort <span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="javascript:onSortOrderChanged(TITLE_ORDER)">Title</a>
+							</li>
+							<li>
+								<a href="javascript:onSortOrderChanged(DATE_ORDER)">Date</a>
+							</li>
+							<li>
+								<a href="javascript:onSortOrderChanged(VIEWS_ORDER)">Views</a>
+							</li>
+							<li>
+								<a href="javascript:onSortOrderChanged(LIKES_ORDER)">Likes</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				<!-- Search field -->
+				<div class="input-group playlist_searchBar">
+					<input type="text" id="playlistSearch-text" class="form-control" placeholder="Search video in playlist"
+						onkeyup="onPlaylistSearchTextChanged(event, this)" value=""/>
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-search" onclick="onSearchPlaylistClick(event, this)">
+							Title
+						</span>
+					</span>
+				</div>
+				
+				<!-- Playlist videos -->
+				<table id="video-playlist" class="playlistTable">					
+				</table>					
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Bootstrap core JavaScript -->  
+	<!-- Placed at the end of the document so the pages load faster -->	
+	<script src="../js/databaseHelper.js"></script>
+	<script src="../js/utils.js"></script>
+	<script src="../js/search.js"></script>
+	<script src="../js/playlist.js"></script>
+		
+	<script src="../js/youtubeAPI/auth.js"></script>	
+	<script src="../js/youtubeAPI/youtube.js"></script>
+	<script src="https://apis.google.com/js/client.js?onload=googleApiClientReady"></script>
+	
+	<script src="../assets/js/jquery-1.10.2.js"></script>
+	<script src="../assets/js/bootstrap.js"></script>
+	<script src="../assets/js/globalize.js"></script>		
+	<script src="../assets/js/popcorn-complete.min.js"></script>
+</body>
+</html>

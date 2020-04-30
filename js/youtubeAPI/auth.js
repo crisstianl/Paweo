@@ -3,17 +3,13 @@
 
 // Key for browser applications ,you can make this more server specific ,or this
 // key can be used from every server
-var API_KEY = 'AIzaSyBa_bxFDHU2WcWjh0P6VuePxbf-Oaedth8';
+const API_KEY = 'AIzaSyDrx95hKmMggmX3ecovHpQaWm4M__9B70A';
 
 // Initialize google api client with a public key
 window.googleApiClientReady = function() {
 	gapi.client.setApiKey(API_KEY);
-	loadYoutubeAPI();
-};
-
-function loadYoutubeAPI(){
 	gapi.client.load('youtube', 'v3' ,function(){		
-		console.log("auth.js::client login done");
+		console.log("YoutubeAPI: client loaded");
 		onYoutubeApiLoaded();
-	});	
-}
+	});
+};

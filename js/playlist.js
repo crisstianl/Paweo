@@ -1,22 +1,3 @@
-document.addEventListener("DOMContentLoaded", function() {
-	dbHelper.initHelper(function() {
-		loadStoredVideos();
-	});
-
-	// Set playlist name
-	$('.playlist_title').text(playlistName);
-	// Reset playlist search views
-	$('#playlistSearch-btn').text("Title");
-	$('#playlistSearch-text').val("");
-
-	$('#playlistSearch-text').keyup(function() {
-		onSearchTextChanged(this.value);
-	});
-
-}, false);
-
-var URL_DOWNLOADER = 'http://fenrir.info.uaic.ro/~adrian.lucaci/Paweo/php/downloader.php';
-
 // List sort types
 var NO_ORDER = -1;
 var TITLE_ORDER = 0;
@@ -30,21 +11,28 @@ var DESCRIPTION_FILTER = 1;
 var DATE_FILTER = 2;
 
 var MAX_ITEMS_IN_PLAYLIST = 50;
+
 // Keep all items from playlist
 var playlistItems = new Array();
+var currentPlaying = -1;
 
 var sortOrder = NO_ORDER;
-var sortAsceding = true;
+var sortAsceding = false;
 
 var filterType = TITLE_FILTER;
-var playlistName = "My playlist";
+var playlistName = "My Playlist";
 var filterText = "";
-var currentPlaying = 0;
+
+
+function initPlaylist() {
+	// load playlist items
+	loadStoredVideos();
+}
 
 function bookmarkVideo(videoId) {
 	// Check for a duplicate in list
 	if (!checkInList(videoId)) {
-		getVideoById(videoId, function(result) {
+		getVideoDetails(videoId, function(result) {
 			// update our list of videos
 			playlistItems.push(result);
 			// update local database
@@ -59,7 +47,7 @@ function bookmarkVideos(videoIds) {
 	// Remove duplicate videos
 	var pendingVideos = checkPlaylistItems(videoIds);
 	if (pendingVideos.length > 0) {
-		getVideosById(pendingVideos, function(results) {
+		getVideosDetails(pendingVideos, function(results) {
 			//update list
 			for (var i = 0; i < results.length; i++) {
 				playlistItems.push(results[i]);
@@ -86,33 +74,55 @@ function populatePlaylistTable() {
 	var playlist = document.getElementById('video-playlist');
 
 	for (var i = 0; i < playlistItems.length; i++) {
-		var valid = checkFilter(playlistItems[i]);
-		if (!valid) {
+		const video = playlistItems[i];
+		if (!checkFilter(video)) { // filter video
 			continue;
 		}
 
 		var row = playlist.insertRow(playlist.rows.length);
+		row.onclick = function (ev) {
+			onPlaylistItemClick(ev, video.id);
+		};
 		var cell1 = row.insertCell(0);
 		var cell2 = row.insertCell(1);
 
 		// Cell 1 content - video thumbnail
-		var videoImg = "<img class='videoThumbnail' src='{0}' alt='' onclick='javascript:onPlaylistItemClick(\"{1}\")'>"
-				.format(playlistItems[i].snippet.thumbnails.medium.url, playlistItems[i].id);
-
-		var cell1Container = "<div class='videoPlaylist-cell1'>{0}</div>".format(videoImg);
-		cell1.innerHTML = cell1Container;
+		let thumbnail = document.createElement('IMG');
+		thumbnail.className = 'videoThumbnail';
+		thumbnail.src = video.snippet.thumbnails.medium.url;
+		cell1.appendChild(thumbnail);
 
 		// Cell 2 content - video title, views, count and so on
-		var removeIcon = "<figure class='removeIcon'><img src='../assets/images/icon_delete.png' alt='' onclick='javascript:removePlaylistRow(\"{0}\")'></figure>"
-				.format(playlistItems[i].id);
-		var title = "<p class='videoTitle'>{0}</p>".format(playlistItems[i].snippet.title);
-		var info = "<p class='videoSubtitle'>{0} views </br>{1}".format(Globalize.format(
-				playlistItems[i].statistics.viewCount, 'n0'), Globalize.format(new Date(
-				playlistItems[i].snippet.publishedAt), 'dd-MM-yyyy'));
+		let infoContainer = document.createElement('DIV');
+		infoContainer.className = 'infoContainer';
+		cell2.appendChild(infoContainer);
 
-		var cell2Container = "<div class='videoPlaylist-cell2'>{0}</div>".format(title + info
-				+ removeIcon);
-		cell2.innerHTML = cell2Container;
+		let title = document.createElement('P');
+		title.className = 'videoTitle';
+		title.innerHTML = video.snippet.title;
+		infoContainer.appendChild(title);
+
+		let infoVideo = document.createElement('P');
+		infoVideo.className = 'videoInfo';
+		infoContainer.appendChild(infoVideo);
+
+		let channelEl = document.createTextNode(video.snippet.channelTitle);
+		infoVideo.appendChild(channelEl);
+		infoVideo.appendChild(document.createElement('BR'));
+
+		let viewsEl = document.createTextNode(Globalize.format(parseInt(video.statistics.viewCount), 'n0') + " views");
+		infoVideo.appendChild(viewsEl);
+		infoVideo.appendChild(document.createElement('BR'));
+
+		let removeBtn = document.createElement('SPAN');
+		removeBtn.className = 'removeBtn';
+		removeBtn.onclick = function (ev) {
+			removePlaylistRow(ev, video.id);
+		};
+		let removeIcon = document.createElement('SPAN');
+		removeIcon.className = 'glyphicon glyphicon-trash';
+		removeBtn.appendChild(removeIcon);
+		infoContainer.appendChild(removeBtn);
 	}
 }
 
@@ -125,7 +135,10 @@ function clearPlaylist() {
 	$('#video-playlist').empty();
 }
 
-function removePlaylistRow(videoId) {
+function removePlaylistRow(ev, videoId) {
+	console.log("Removing video " + videoId + " from playlist");
+	ev.stopPropagation();
+
 	// remove it from list
 	for (var i = 0; i < playlistItems.length; i++) {
 		if (playlistItems[i].id === videoId) {
@@ -145,37 +158,42 @@ function refreshData() {
 	$('#video-playlist').empty();
 	// Reorder list
 	if (sortOrder != NO_ORDER) {
-		playlistItems.sort(sortComparator);
+		playlistItems.sort(compare);
 	}
 	// create ui table
 	populatePlaylistTable();
 }
 
-sortComparator = function getSortComparator(a, b) {
+function compare(v1, v2) {
 	var retValue = 0;
-
 	switch (sortOrder) {
 	case TITLE_ORDER:
-		retValue = a.snippet.title < b.snippet.title ? -1 : 1;
+		var s1 = v1.snippet.title;
+		var s2 = v2.snippet.title
+		retValue = s1.compare(s2);
 		break;
 	case DATE_ORDER:
-		var d1 = new Date(a.snippet.publishedAt);
-		var d2 = new Date(b.snippet.publishedAt);
-		retValue = d1 < d2 ? -1 : 1;
+		var d1 = new Date(v1.snippet.publishedAt);
+		var d2 = new Date(v2.snippet.publishedAt);
+		retValue = d1.compare(d2);
 		break;
 	case VIEWS_ORDER:
-		retValue = a.statistics.viewCount < b.statistics.viewCount ? -1 : 1;
+		var n1 = parseInt(v1.statistics.viewCount);
+		var n2 = parseInt(v2.statistics.viewCount);
+		retValue = n1 < n2 ? -1 : n1 > n2 ? 1 : 0;
 		break;
 	case LIKES_ORDER:
-		retValue = a.statistics.likeCount < b.statistics.likeCount ? -1 : 1;
+		var n1 = parseInt(v1.statistics.likeCount);
+		var n2 = parseInt(v2.statistics.likeCount);
+		retValue = n1 < n2 ? -1 : n1 > n2 ? 1 : 0;
 		break;
 	}
 
-	// For descending order just inverse the sign;
-	if (!sortAsceding) {
-		retValue *= -1;
+	if (sortAsceding) {
+		return retValue;
+	} else {
+		return retValue * -1; // For descending order just inverse the sign;
 	}
-	return retValue;
 };
 
 function checkInList(videoId) {
@@ -224,178 +242,200 @@ function checkFilter(row) {
 	return false;
 }
 
-function onPlaylistItemClick(videoId) {
-	document.getElementById('videoPlayer').innerHTML = "";
-	// Create a popcorn instance by calling the Youtube player plugin
-	var player = Popcorn.youtube('#videoPlayer', "http://www.youtube.com/watch?v=" + videoId);
-	// play the video right away
-	player.play();
+function onPlaylistItemClick(ev, videoId) {
+	console.log("Opening video " + videoId);
+	if (ev) {
+		ev.stopPropagation();
+	}
 
-	player.on("ended", function() {
-		currentPlaying++;
-		if (currentPlaying >= playlistItems.length || currentPlaying < 0) {
-			currentPlaying = 0;
-		}
-		onPlaylistItemClick(playlistItems[currentPlaying].id);
-	});
-
-	setCurrentPlaying(videoId);
-	updateViews();
-}
-
-function setCurrentPlaying(videoId) {
-	for (var i = 0; i < playlistItems.length; i++) {
-		if (playlistItems[i].id === videoId) {
+	// get video index from the playlist
+	for (let i = 0; i < playlistItems.length; i++) {
+		if (videoId === playlistItems[i].id) {
 			currentPlaying = i;
 			break;
 		}
 	}
-}
-
-function updateViews() {
-	var playlist = document.getElementById('video-playlist');
-	for (var row = 0; row < playlist.rows.length; row++) {
-		var style = "background-color: white";
-		if (row === currentPlaying) {
-			style = "background-color: #BFD4FF";
+	
+	// highlight the current playing row
+	const playlist = document.getElementById('video-playlist');
+	for (let i = 0; i < playlist.rows.length; i++) {
+		if (i === currentPlaying) {
+			playlist.rows[i].classList.add("active");
+		} else {
+			playlist.rows[i].classList.remove('active');
 		}
-		playlist.rows[row].style.cssText = style;
 	}
+
+	playYoutubeVideo(videoId, playNextVideo);
 }
 
-function onNewBtnClick() {
+function playYoutubeVideo(videoId, onVideoFinished) {
+	document.getElementById('videoPlayer').innerHTML = "";
+	// Create a popcorn instance by calling the Youtube player plugin
+	var player = Popcorn.youtube('#videoPlayer', "http://www.youtube.com/watch?v=" + videoId);
+	
+	// play the video right away
+	player.play();
+
+	player.on("ended", onVideoFinished);
+}
+
+function playNextVideo() {
+	currentPlaying++;
+	if (currentPlaying < 0 || currentPlaying >= playlistItems.length) {
+		currentPlaying = 0;
+	}
+	onPlaylistItemClick(null, playlistItems[currentPlaying].id);
+}
+
+function onNewBtnClick(ev) {
+	console.log("Playlist action create new");
+	ev.stopPropagation();
 	if (playlistItems.length > 0) {
-		var forceSave = window.confirm("Save current list");
-		if (forceSave) {
+		// ask to save playlist before destruction
+		if (window.confirm("Save current list")) {
 			onSaveBtnClick();
 		}
 		clearPlaylist();
 	}
 }
 
-function onLoadBtnClick() {
-	var loadHandler = function() {
-		var errorMsg = null;
-		if (this.files.length === 0) {
-			errorMsg = "No file selected";
-		} else if (getFileExtension(this.files[0].name) !== "json") {
-			errorMsg = "Invalid file extension, only JSON accepted";
-		}
-		if (errorMsg != null) {
-			alert(errorMsg);
-		} else {
-			var reader = new FileReader();
-			reader.onload = function(e) {
-				var videoList = JSON.parse(e.target.result);
-				var videoIds = new Array();
-				for (var i = 0; i < videoList.length; i++) {
-					videoIds.push(videoList[i].videoId);
-				}
-
-				bookmarkVideos(videoIds);
-			};
-			reader.readAsText(this.files[0]);
-
-		}
-	};
-
+function onLoadBtnClick(ev) {
+	console.log("Playlist action load from file");
+	ev.stopPropagation();
 	var input = document.createElement('input');
 	input.type = 'file';
 	input.accept = '.JSON';
-	input.addEventListener("change", loadHandler, false);
+	input.addEventListener("change", handleFileLoad, false);
 	input.click();
 }
 
-function onSaveBtnClick() {
-	var list = new Array();
+function handleFileLoad() {
+	if (!this.files || this.files.length === 0) {
+		window.alert("No file selected");
+	} else if (getFileExtension(this.files[0].name) !== "json") {
+		window.alert("Invalid file extension, only JSON accepted");
+	} else {
+		var reader = new FileReader();
+		reader.onload = function(ev) {
+			var videoList = JSON.parse(ev.target.result);
+			var videoIds = new Array();
+			for (var i = 0; i < videoList.length; i++) {
+				videoIds.push(videoList[i].videoId);
+			}
 
+			bookmarkVideos(videoIds);
+		};
+		reader.readAsText(this.files[0]);
+	}
+}
+
+function onSaveBtnClick(ev) {
+	console.log("Playlist action save to file");
+	ev.stopPropagation();
+
+	const list = new Array();
 	for (var i = 0; i < playlistItems.length; i++) {
-		var obj = {
+		list.push({
 			videoId : playlistItems[i].id,
 			videoTitle : playlistItems[i].snippet.title
-		};
-		list.push(obj);
+		});
 	}
 
-	var params = {
-		'filename' : playlistName + ".json",
-		'content' : JSON.stringify(list)
-	};
+	let filename = playlistName + ".json";
+	let file = new Blob([JSON.stringify(list)], {type: "application/json"});
 
-	var form = document.createElement("form");
-	form.setAttribute("method", "post");
-	form.setAttribute("action", URL_DOWNLOADER);
-
-	for ( var key in params) {
-		if (params.hasOwnProperty(key)) {
-			var hiddenField = document.createElement("input");
-			hiddenField.setAttribute("type", "hidden");
-			hiddenField.setAttribute("name", key);
-			hiddenField.setAttribute("value", params[key]);
-
-			form.appendChild(hiddenField);
-		}
-	}
-
-	form.submit();
+    if (window.navigator.msSaveOrOpenBlob) { // IE10+
+        window.navigator.msSaveOrOpenBlob(file, filename);
+	} else { // Others
+		let url = URL.createObjectURL(file);
+		let link = document.createElement('A');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        setTimeout(function() {
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);  
+        }, 0); 
+    }
 }
 
 function onSortOrderChanged(newSortOrder) {
-	if (sortOrder === newSortOrder) {
-		sortAsceding = false;
+	if (sortOrder === newSortOrder) { // same field
+		sortAsceding = true; // change direction
 	} else {
 		sortOrder = newSortOrder;
-		sortAsceding = true;
+		sortAsceding = false;
 	}
 	setDropdownSortTypes();
 	refreshData();
 }
 
-function onSearchTextChanged(text) {
-	filterText = text;
-	refreshData();
+function onPlaylistSearchTextChanged(ev, htmlInput) {
+	ev.preventDefault();
+    if (ev.keyCode === 13) { // enter
+		var text = htmlInput.value;
+		if (text && text.length > 1) {
+			console.log("Playlist search items by \"" + text + "\"");
+			filterText = text;
+			refreshData();
+		}
+	}
 }
 
-function onSearchPlaylistClick(btn) {
+function onSearchPlaylistClick(ev, htmlButton) {
+	ev.stopPropagation();
+
 	// Loop through posible filters
 	filterType++;
 	switch (filterType) {
 	case DESCRIPTION_FILTER:
-		btn.innerHTML = "Desc";
+		htmlButton.innerHTML = " Description";
 		break;
 	case DATE_FILTER:
-		btn.innerHTML = "Date";
+		htmlButton.innerHTML = " Date";
 		break;
 	default:
 		filterType = TITLE_FILTER;
-		btn.innerHTML = "Title";
+		htmlButton.innerHTML = " Title";
 	}
-	// Apply new filter on list
-	onSearchTextChanged(document.getElementById('playlistSearch-text').value);
+
+	var text = document.getElementById('playlistSearch-text').value;
+	if (text && text.length > 1) {
+		console.log("Playlist search items by \"" + text + "\"");
+		filterText = text;
+		refreshData();
+	}
 }
 
-function changePlaylistName() {
-	var input = window.prompt("Name playlist", playlistName);
+function changePlaylistName(ev) {
+	ev.stopPropagation();
+	var input = window.prompt("Enter playlist name", playlistName);
 	if (!isEmptyOrBlank(input)) {
 		playlistName = input;
-		$('.playlist_title').text(playlistName);
+		$('#playlist_title').text(playlistName);
 	}
 }
 
 function setDropdownSortTypes() {
+	var field = null;
 	switch (sortOrder) {
 	case TITLE_ORDER:
-		$('.dropdown-toggle').text("Title");
+		field = "Title";
 		break;
 	case DATE_ORDER:
-		$('.dropdown-toggle').text("Date");
+		field = "Date";
 		break;
 	case VIEWS_ORDER:
-		$('.dropdown-toggle').text("Views");
+		field = "Views";
 		break;
 	case LIKES_ORDER:
-		$('.dropdown-toggle').text("Likes");
+		field = "Likes";
 		break;
 	}
+
+	$('.dropdown-toggle').text(field);
 	$('.dropdown-toggle').append(" <span class='caret'></span>");
+	console.log("Playlist sorting videos by " + field + (sortAsceding ? " ascending" : " descending"));
 }
